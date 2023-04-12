@@ -1,7 +1,7 @@
 #include "CalcGrid.hpp"
 
 //2D Matrix realisation
-Matrix2D::Matrix2D(Matrix2D const& A): N(A.N), M(A.M),Matrix(new double *[N+1])
+Matrix2D::Matrix2D(Matrix2D const& A): N(A.N), M(A.M),Matrix(new double *[A.N+1])
 {
     Matrix[0] = new double [(N+1) * (M+1)];
     for (int j = 0; j <= M; ++j)
@@ -91,7 +91,6 @@ Matrix2D & Matrix2D::operator=(Matrix2D const &B)
         Resize(B.GetN(), B.GetM());
         for (int i = 0; i <= N; ++i)
         {
-            Matrix[i] = Matrix[i-1] + M;
             for (int j = 0; j <= M; ++j)
             {
                 Matrix[i][j] = B.Matrix[i][j];
@@ -187,29 +186,6 @@ void Matrix3D::SetValue(int p, int n, int m, double const value)
     Matrix[p][n][m] = value;
 }
 
-void Matrix3D::SetLayer(int p, Matrix2D const &A)
-{
-    for (int i = 0; i < N; ++i)
-    {
-        for (int j = 0; j < M; ++j)
-        {
-            Matrix[p][i][j] = A.GetValue(i,j);
-        }
-    }
-}
-Matrix2D& Matrix3D::GetLayer(int p) const
-{
-    Matrix2D A(N, M);
-    for (int i = 0; i < N; ++i)
-    {
-        for (int j = 0; j < M; ++j)
-        {
-           A.SetValue(i,j, Matrix[p][i][j]);
-        }
-    }
-    return A;
-}
-
 //2D Calculation Grid realisation
 CalcGrid2D::CalcGrid2D(int P, int N, int M): Matrix(P,N,M), dt(1./P), dx(1./N), dy(1./M) {}
 CalcGrid2D::~CalcGrid2D() {}
@@ -290,22 +266,24 @@ double Grid2D::Getdy() const
     return dy;
 }
 
-
 double Grid2D::GetX(int n) const
-
-
-
 {
     if ((n <= GetN()) && (n >= 0))
-        return n * dx;
+        return x0 + n * dx;
     else
         return -1;
 }
 double Grid2D::GetY(int m) const
 {
     if ((m <= GetM()) && (m >= 0))
-        return m * dy;
+        return y0 + m * dy;
     else
         return -1;
 }
 
+void Grid2D::Reshape(int N, int M)
+{
+    Resize(N, M);
+    dx = (xN - x0) / N;
+    dy = (yM - y0) / M;
+}

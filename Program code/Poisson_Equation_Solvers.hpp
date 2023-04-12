@@ -1,5 +1,9 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "CalcGrid.hpp"
 
 // Borders
@@ -20,6 +24,7 @@
 //Method difinition
 class Method : public Grid2D
 {
+    Matrix2D MatrixCopy;
     Matrix2D F;
     double (&Border_x0)(double);
     double (&Border_xN)(double);
@@ -28,9 +33,11 @@ class Method : public Grid2D
     double (&f)(double, double);
 
 protected:
+    void InitialState();
     void SetBorders();
     void CalcF();
     double GetF(int n, int m);
+    void GetMatrixCopy();
 
 public:
     Method(double x0, double xN,
@@ -41,20 +48,15 @@ public:
            double (&Border_yM)(double),
            double (&f)(double, double));
     ~Method();
+    double GetMatrixCopyValue(int n, int m);
+
+    void SaveSolution(std::string path);
 };
 
 // Jakobi Method Difinition
 class Jakobi_Method : public Method //Grid2D
 {
-    // double delta = 0;
     int iter_num = 0;
-    // double (&Border_x0)(double);
-    // double (&Border_xN)(double);
-    // double (&Border_y0)(double);
-    // double (&Border_yM)(double);
-    // double (&f)(double, double);
-
-    // void SetBorders();
 
 public:
     Jakobi_Method(double x0, double xN,
@@ -105,4 +107,23 @@ public:
     ~SOR_Method();
 
     int Solve(int N, int M, double w, double e);
+};
+
+
+// Gauss Seidel 9 Points Method Difinition
+class Gauss_Seidel_9Points_Method : public Method
+{
+    int iter_num = 0;
+
+public:
+    Gauss_Seidel_9Points_Method(double x0, double xN,
+                        double y0, double yM,
+                        double (&Border_x0)(double),
+                        double (&Border_xN)(double),
+                        double (&Border_y0)(double),
+                        double (&Border_yM)(double),
+                        double (&f)(double, double));
+    ~Gauss_Seidel_9Points_Method();
+
+    int Solve(int N, int M, double e);
 };

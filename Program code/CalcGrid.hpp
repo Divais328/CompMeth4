@@ -39,9 +39,6 @@ public:
 
     double GetValue(int p, int n, int m) const;
     void SetValue(int p, int n, int m, double const value);
-
-    void SetLayer(int p, Matrix2D const &A);
-    Matrix2D& GetLayer(int p) const;
 };
 
 //2D Calculation Grid difinition
@@ -74,7 +71,8 @@ public:
 class Grid2D : public Matrix2D
 {
     // Matrix3D Matrix;
-    const double x0, xN, dx, y0, yM, dy;
+    const double x0, xN, y0, yM;
+    double dx, dy;
 
 public:
     Grid2D(int N, double x0, double xN, int M, double y0, double yM);
@@ -85,6 +83,6 @@ public:
 
     double GetX(int n) const;
     double GetY(int m) const;
+
+    void Reshape(int N, int M);
 };
-
-
