@@ -92,8 +92,9 @@ void Method::SaveSolution(std::string path)
         {
             for (int m = 0; m <= GetM();++m)
             {
-                File << GetX(n) << "\t" << GetY(m) << "\t" << GetValue(n, m);
+                File << GetX(n) << "\t" << GetY(m) << "\t" << GetValue(n, m)<<std::endl;
             }
+            File << std::endl;
         }
         File.close();
     }
@@ -118,7 +119,7 @@ Jakobi_Method::~Jakobi_Method(){}
 int Jakobi_Method::Solve(int N, int M, double e)
 {
     double delta = 0;
-    double delta_max = 1;
+    double delta_max = 0;
     double u0 = 0;
     iter_num = 0;
 
@@ -129,6 +130,8 @@ int Jakobi_Method::Solve(int N, int M, double e)
 
     do
     {
+        delta = 0;
+        delta_max = 0;
         GetMatrixCopy();
         for(int n  = 1; n < GetN(); ++n)
         {
@@ -142,7 +145,7 @@ int Jakobi_Method::Solve(int N, int M, double e)
             }
         }
         ++iter_num;
-    } while ((delta_max > e && iter_num < 10000) || iter_num < 5);
+    } while ((delta_max > e && iter_num < 100000) || iter_num < 5);
     return iter_num;
 }
 
@@ -191,7 +194,7 @@ int Gauss_Seidel_Method::Solve(int N, int M, double e)
             }
         }
         ++iter_num;
-    } while ((delta_max > e && iter_num < 10000) || iter_num < 5);
+    } while ((delta_max > e && iter_num < 100000) || iter_num < 5);
     return iter_num;
 }
 
@@ -250,7 +253,7 @@ int SOR_Method::Solve(int N, int M, double w, double e)
         }
         
         ++iter_num;
-    } while ((delta_max > e && iter_num < 10000) || iter_num < 5);
+    } while ((delta_max > e && iter_num < 100000) || iter_num < 5);
     return iter_num;
 }
 
@@ -299,6 +302,6 @@ int Gauss_Seidel_9Points_Method::Solve(int N, int M, double e)
             }
         }
         ++iter_num;
-    } while ((delta_max > e && iter_num < 10000) || iter_num < 5);
+    } while ((delta_max > e && iter_num < 100000) || iter_num < 5);
     return iter_num;
 }

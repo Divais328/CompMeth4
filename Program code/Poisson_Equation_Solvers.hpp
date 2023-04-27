@@ -50,6 +50,9 @@ public:
     ~Method();
     double GetMatrixCopyValue(int n, int m);
 
+    virtual int Solve(int N, int M, double e) = 0;
+    virtual int Solve(int N, int M, double w, double e) = 0;
+
     void SaveSolution(std::string path);
 };
 
@@ -69,6 +72,7 @@ public:
     ~Jakobi_Method();
 
     int Solve(int N, int M, double e);
+    int Solve(int N, int M, double w, double e) { return 0; }
 };
 
 // Gauss Seidel Method Difinition
@@ -87,6 +91,7 @@ public:
     ~Gauss_Seidel_Method();
 
     int Solve(int N, int M, double e);
+    int Solve(int N, int M, double w, double e) { return 0; }
 };
 
 
@@ -107,6 +112,7 @@ public:
     ~SOR_Method();
 
     int Solve(int N, int M, double w, double e);
+    int Solve(int N, int M, double e) { return 0; }
 };
 
 
@@ -126,4 +132,5 @@ public:
     ~Gauss_Seidel_9Points_Method();
 
     int Solve(int N, int M, double e);
+    int Solve(int N, int M, double w, double e) { return 0; }
 };
